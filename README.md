@@ -10,3 +10,4 @@
 
 1) Convert sort_type from string to array with min, max attribute values
 2) Consider injured players
+3) Consider fixture difficulty while sorting
