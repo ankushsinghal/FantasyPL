@@ -14,9 +14,9 @@
 
 ### Player Status Codes
 
-i - injured
-a - available
-d - 25% chance (doubt)
-n - loan
-s - suspended
-u - transferred
+i - injured  
+a - available  
+d - 25% chance (doubt)  
+n - loan  
+s - suspended  
+u - transferred  
