@@ -145,5 +145,48 @@ class FantasyPL:
     else:
       print("No Data to plot")
 
+  def sortByTotalPoints(self, is_descending, num_players, player_type=PLAYER_TYPE_DEFAULT, min_cost=MIN_PRICE_DEFAULT, max_cost=MAX_PRICE_DEFAULT):
+    players_dict = {}
+    for player in self.players:
+      
+      # check if player type matches the input provided
+      if player_type != "ANY" and player.element_type != self.getElementTypeIdFromShortName(player_type):
+        continue
+      # check if player is unavailable
+      if player.isUnavailable():
+        continue
+      # check if player satisfies cost constraints
+      if player.cost < min_cost or player.cost > max_cost:
+        continue
+      
+      # calculate ROI
+      y_item = (player.total_points)
+
+      player_name = player.first_name.replace(' ', '\n') + '\n' + player.second_name.replace(' ', '\n')
+      players_dict[player_name] = y_item
+    
+    sorted_players_dict = sorted(players_dict.items(), key=operator.itemgetter(1), reverse=is_descending)
+
+    name_list = []
+    y_items_list = []
+    counter = 0
+
+    for key, value in sorted_players_dict:
+      if counter < num_players:
+        counter = counter + 1
+      else:
+        break
+      name_list.append(key)
+      y_items_list.append(value)
+
+    if len(name_list) > 0 and len(y_items_list) > 0:
+      sorted_players_list = {"Name": name_list, "Total Points": y_items_list}
+      sorted_players_data_frame = pd.DataFrame(sorted_players_list)
+      # print(sorted_players_data_frame)
+      ax = sorted_players_data_frame.plot.bar(x='Name', y="Total Points", rot=0)
+      plt.show()
+    else:
+      print("No Data to plot")
+
   def predictSquad(self):
     print("Calling predictSquad function")
