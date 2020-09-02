@@ -101,8 +101,11 @@ class FantasyPL:
       # check if player type matches the input provided
       if player_type != "ANY" and player.element_type != self.getElementTypeIdFromShortName(player_type):
         continue
+      # check if player is unavailable
+      if player.isUnavailable():
+        continue
       # check if player satisfies cost constraints
-      elif player.cost < min_cost or player.cost > max_cost:
+      if player.cost < min_cost or player.cost > max_cost:
         continue
       
       # calculate ROI

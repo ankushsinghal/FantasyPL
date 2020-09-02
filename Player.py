@@ -18,3 +18,8 @@ class Player:
   def setIndividualStats(self, status, form):
     self.status = status
     self.form = form
+
+  def isUnavailable(self):
+    if self.status == "i" or self.status == "n" or self.status == "u":
+      return True
+    return False
