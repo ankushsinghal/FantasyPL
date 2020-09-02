@@ -7,7 +7,7 @@ fantasyPL.getFPLJson()
 fantasyPL.createElementTypes()
 fantasyPL.createTeams()
 fantasyPL.createPlayers()
-fantasyPL.sortBy("MPP", False, 10)
+fantasyPL.sortByROI(True, 10, "MID", 10.0)
 # fantasyPL.predictSquad()
 
 # fields = ['first_name', 'second_name', 'cost']

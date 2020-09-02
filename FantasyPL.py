@@ -6,12 +6,9 @@ from ElementType import ElementType
 from Team import Team
 from Player import Player
 
-def convertTo(sort_type, player):
-  if sort_type == "ROI": # Return of Inverstment
-    return (player.total_points)*1.0/(player.cost)
-  elif sort_type == "MPP": # Minutes Per Point
-    if player.total_points > 0 and player.minutes_played >= 1000:
-      return (player.minutes_played)*1.0/(player.total_points)
+PLAYER_TYPE_DEFAULT = "ANY"
+MIN_PRICE_DEFAULT = 0.0
+MAX_PRICE_DEFAULT = 20.0
 
 class FantasyPL:
   def __init__(self):
@@ -41,6 +38,13 @@ class FantasyPL:
 
       # attrs = vars(new_element_type)
       # print(', '.join("%s: %s" % item for item in attrs.items()))
+
+  def getElementTypeIdFromShortName(self, short_name):
+    for element_type in self.element_types:
+      if element_type.short_name == short_name:
+        return element_type.id
+    print("Wrong short_name provided for Element Type")
+    return -1
 
   def createTeams(self):
     self.teams = []
@@ -90,12 +94,20 @@ class FantasyPL:
       # attrs = vars(new_player)
       # print(', '.join("%s: %s" % item for item in attrs.items()))
 
-  def sortBy(self, sort_type, is_descending, num_players):
+  def sortByROI(self, is_descending, num_players, player_type=PLAYER_TYPE_DEFAULT, min_cost=MIN_PRICE_DEFAULT, max_cost=MAX_PRICE_DEFAULT):
     players_dict = {}
     for player in self.players:
-      y_item = convertTo(sort_type, player)
-      if y_item == None:
+      
+      # check if player type matches the input provided
+      if player_type != "ANY" and player.element_type != self.getElementTypeIdFromShortName(player_type):
         continue
+      # check if player satisfies cost constraints
+      elif player.cost < min_cost or player.cost > max_cost:
+        continue
+      
+      # calculate ROI
+      y_item = (player.total_points)*1.0/(player.cost)
+
       player_name = player.first_name.replace(' ', '\n') + '\n' + player.second_name.replace(' ', '\n')
       players_dict[player_name] = y_item
     
@@ -113,12 +125,14 @@ class FantasyPL:
       name_list.append(key)
       y_items_list.append(value)
 
-    sorted_players_list = {"Name": name_list, sort_type: y_items_list}
-    sorted_players_data_frame = pd.DataFrame(sorted_players_list)
-    # print(sorted_players_data_frame)
-    ax = sorted_players_data_frame.plot.bar(x='Name', y=sort_type, rot=0)
-    plt.show()
-
+    if len(name_list) > 0 and len(y_items_list) > 0:
+      sorted_players_list = {"Name": name_list, "ROI": y_items_list}
+      sorted_players_data_frame = pd.DataFrame(sorted_players_list)
+      # print(sorted_players_data_frame)
+      ax = sorted_players_data_frame.plot.bar(x='Name', y="ROI", rot=0)
+      plt.show()
+    else:
+      print("No Data to plot")
 
   def predictSquad(self):
     print("Calling predictSquad function")
