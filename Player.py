@@ -4,6 +4,7 @@ class Player:
     self.player_code = player_code
     self.first_name = first_name
     self.second_name = second_name
+    self.full_name = self.first_name + " " + self.second_name
     self.element_type = element_type
     self.team_code = team_code
 

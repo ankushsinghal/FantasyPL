@@ -3,6 +3,7 @@ class Team:
     self.team_code = team_code
     self.team_name = team_name
     self.short_name = short_name
+    self.players = []
 
   def setMatchStats(self, matches_played, points_scored, league_position):
     self.matches_played = matches_played

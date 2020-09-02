@@ -67,6 +67,13 @@ class FantasyPL:
       # attrs = vars(new_team)
       # print(', '.join("%s: %s" % item for item in attrs.items()))
 
+  def addToTeam(self, player):
+    code = player.team_code
+    for team in self.teams:
+      if team.team_code == code:
+        team.players.append(player)
+        break
+
   def createPlayers(self):
     self.players = []
     players = self.full_data["elements"]
@@ -90,6 +97,7 @@ class FantasyPL:
       new_player.setIndividualStats(status, form)
 
       self.players.append(new_player)
+      self.addToTeam(new_player)
       
       # attrs = vars(new_player)
       # print(', '.join("%s: %s" % item for item in attrs.items()))
